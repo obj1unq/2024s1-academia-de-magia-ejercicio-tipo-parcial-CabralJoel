@@ -39,6 +39,22 @@ class Cosa {
 	var property marca
 	var property esMagico
 	var property reliquia
+	
+	method utilidad() {
+		return self.volumen() + self.utilidadSiMagica() + self.utilidadSiReliquia() + self.utilidadPorMarca() 
+	}
+	
+	method utilidadSiMagica() {
+		return if (esMagico) 3 else 0
+	}
+	
+	method utilidadSiReliquia() {
+		return if (reliquia) 5 else 0
+	}
+	
+	method utilidadPorMarca() {
+		return marca.utilidad(self)
+	}
 }
 
 

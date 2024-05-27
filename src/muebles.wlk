@@ -21,6 +21,16 @@ class Mueble{
 			self.error("no se puede cuardar" + cosa)
 		}
 	}
+	 method utilidad() {
+	 	 return self.utilidadDeLasCosas() / self.precio()	
+	 }
+	 
+	 method utilidadDeLasCosas() {
+	 	return cosas.sum({cosa => cosa.utilidad()})
+	 }
+	 
+	 method precio() 
+	
 }
 
 class Baul inherits Mueble{
@@ -30,10 +40,23 @@ class Baul inherits Mueble{
 	override method puedeGuardar(cosa){
 		return super(cosa) and volumenMax >= self.volumenActual() + cosa.volumen()
 		}
-	
+	override method precio(){
+		return volumenMax + 2
+	}
+	override method utilidad(){
+		return super() + self.extra()
+	}
+	method extra(){
+		return if(self.todasReliquias()) 2 else 0
+	}
+	method todasReliquias() {
+		return cosas.all({cosa => cosa.reliquia()})
+	}
 }
 
 class GabineteMagico inherits Mueble{
+	
+	const property precio
 	
 	override method puedeGuardar(cosa){
 		return super(cosa) and cosa.esMagico()
@@ -41,13 +64,28 @@ class GabineteMagico inherits Mueble{
 }
 
 class Armario inherits Mueble{
-	
 	var property cantMax
-	
-	override method puedeGuardar(cosa){
-		return super(cosa) and self.hayEspacio()
+
+	override method puedeGuardar(cosa) {
+		return super(cosa) and self.hayLugar() 
 	}
-	method hayEspacio(){
-		return cantMax > cosas.size()
+	
+	method hayLugar() {
+		return cantMax > cosas.size() 
+	}
+
+	override method precio() {
+		return 5 * cantMax
+	}
+}
+
+class BaulMagico inherits Baul{
+	
+	override method utilidad(){
+		return super() +self.extraMagicos()
+	}
+	
+	method extraMagicos(){
+		return cosas.count({cosa => cosa.esMagico()})
 	}
 }
